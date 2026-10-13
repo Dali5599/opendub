@@ -18,7 +18,7 @@
 - [x] 11. Implement Voice Reference Sampler and Audio Normalizer in src/opendub/voice_sampler.py
 - [x] 12. Implement Local TTS Engine and Cloning Adapter in src/opendub/tts_engine.py
 - [x] 13. Implement Emotion and Expressive Tone Preserver in src/opendub/emotion.py
-- [ ] 14. Implement Audio Mixer and Ducking Engine in src/opendub/mixer.py
+- [x] 14. Implement Audio Mixer and Ducking Engine in src/opendub/mixer.py
 - [ ] 15. Implement End-to-End Dubbing Orchestrator Pipeline in src/opendub/pipeline.py
 
 ## Phase 4 : Video Remuxing, Web Studio UI & CLI
