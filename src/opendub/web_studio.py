@@ -1,4 +1,4 @@
-"""Web Studio HTML/JS Dashboard for OpenDub."""
+"""Web Studio HTML/JS Dashboard for OpenDub — Multi-View Complete Application."""
 
 STUDIO_HTML = """<!DOCTYPE html>
 <html lang="en" class="dark">
@@ -76,41 +76,55 @@ STUDIO_HTML = """<!DOCTYPE html>
       border: 1px solid rgba(255, 45, 108, 0.35);
       color: #ff5e8c;
     }
-    .glass-panel {
-      background: rgba(22, 20, 32, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid #2a243d;
+    .nav-btn.active {
+      background: rgba(255, 45, 108, 0.18);
+      border-color: rgba(255, 45, 108, 0.5);
+      color: #ff2d6c;
     }
   </style>
 </head>
 <body class="flex h-screen w-screen overflow-hidden text-sm select-none antialiased">
 
   <!-- ==================== ULTRA-MINIMAL DOCK SIDEBAR ==================== -->
-  <aside class="w-14 bg-canvas-base border-r border-canvas-border flex flex-col items-center py-4 justify-between shrink-0 z-30">
+  <aside class="w-16 bg-canvas-base border-r border-canvas-border flex flex-col items-center py-4 justify-between shrink-0 z-30">
     <div class="flex flex-col items-center space-y-6">
       <!-- App Brand Logo -->
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-700 via-brand-600 to-brand-accent flex items-center justify-center shadow-lg shadow-brand-900/40 cursor-pointer">
+      <div onclick="switchView('design')" class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-700 via-brand-600 to-brand-accent flex items-center justify-center shadow-lg shadow-brand-900/40 cursor-pointer active:scale-95 transition">
         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/>
         </svg>
       </div>
 
-      <!-- Main Navigation Icons -->
+      <!-- Main Navigation Icons corresponding to screenshot -->
       <nav class="flex flex-col space-y-3">
-        <button title="Voice Studio & Dubbing" class="w-10 h-10 rounded-lg flex items-center justify-center text-brand-400 bg-brand-500/10 border border-brand-500/20 transition hover:bg-brand-500/20">
+        <!-- 1. Voice Design Studio (Active default) -->
+        <button id="nav-design" onclick="switchView('design')" title="Voice Design Studio" class="nav-btn active w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 border border-transparent hover:text-white hover:bg-canvas-panel transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+        </button>
+
+        <!-- 2. Voice Cloner & Zero-Shot Sampler (The layered cards icon) -->
+        <button id="nav-cloner" onclick="switchView('cloner')" title="Voice Cloner & Reference Audio" class="nav-btn w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 border border-transparent hover:text-white hover:bg-canvas-panel transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
         </button>
-        <button title="Audio Separation (Demucs)" class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-canvas-panel transition">
+
+        <!-- 3. Audio Separation / Music & Stems (The Music Note icon) -->
+        <button id="nav-stems" onclick="switchView('stems')" title="Demucs v4 Audio Separation (Stems)" class="nav-btn w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 border border-transparent hover:text-white hover:bg-canvas-panel transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
         </button>
-        <button title="Lip-Sync & Video Remux" class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-canvas-panel transition">
+
+        <!-- 4. Video Dubbing & Lip-Sync Remux (The Camera icon) -->
+        <button id="nav-video" onclick="switchView('video')" title="Video Pipeline & Lip-Sync Remuxer" class="nav-btn w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 border border-transparent hover:text-white hover:bg-canvas-panel transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
         </button>
-        <button title="Dialogue Timeline & Subtitles" class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-canvas-panel transition">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+
+        <!-- 5. Dialogue Timeline & Subtitles (The Chat Bubble icon) -->
+        <button id="nav-subtitles" onclick="switchView('subtitles')" title="Dialogue Timeline & Subtitles (SRT/VTT)" class="nav-btn w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 border border-transparent hover:text-white hover:bg-canvas-panel transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
         </button>
-        <button title="Saved Profiles & Cloned Voices" class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-canvas-panel transition">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+
+        <!-- 6. Library / Saved Voices (The Folder icon) -->
+        <button id="nav-library" onclick="switchView('library')" title="Saved Voices & Model Registry" class="nav-btn w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 border border-transparent hover:text-white hover:bg-canvas-panel transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
         </button>
       </nav>
     </div>
@@ -118,32 +132,33 @@ STUDIO_HTML = """<!DOCTYPE html>
     <!-- Bottom Utility Icons -->
     <div class="flex flex-col space-y-3 items-center">
       <div class="relative">
-        <button class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-canvas-panel transition">
+        <button class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-canvas-panel transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
         </button>
-        <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
-        <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-brand-500"></span>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-500"></span>
       </div>
-      <button title="Settings & Local Backends" class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-canvas-panel transition">
+      <button onclick="switchView('settings')" title="Local System Settings" class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-canvas-panel transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
       </button>
     </div>
   </aside>
 
-  <!-- ==================== LEFT CONTROL PANEL: VOICE DESIGN & PARAMS ==================== -->
+  <!-- ==================== LEFT CONTROL PANEL: CONTEXTUAL TO ACTIVE VIEW ==================== -->
   <section class="w-80 bg-canvas-subtle border-r border-canvas-border flex flex-col shrink-0 custom-scrollbar overflow-y-auto">
     <!-- Panel Header -->
     <div class="p-4 border-b border-canvas-border flex items-center justify-between">
       <div class="flex items-center space-x-2">
         <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-        <span class="font-semibold text-white tracking-wide text-xs uppercase">Voice Design</span>
+        <span id="panelTitle" class="font-semibold text-white tracking-wide text-xs uppercase">Voice Design</span>
       </div>
       <button class="text-xs text-slate-500 hover:text-slate-300">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
       </button>
     </div>
 
-    <div class="p-4 space-y-6 flex-1">
+    <!-- Panel Body (Voice Design mode) -->
+    <div id="sidePanelContent" class="p-4 space-y-6 flex-1">
       <!-- Voice Prompt Description -->
       <div class="space-y-2">
         <div class="flex items-center justify-between text-xs">
@@ -228,7 +243,7 @@ STUDIO_HTML = """<!DOCTYPE html>
     </div>
   </section>
 
-  <!-- ==================== MAIN WORKSPACE: VOICE GALLERY & SCRIPT EDITOR ==================== -->
+  <!-- ==================== MAIN WORKSPACE: MULTI-VIEW VIEWS ==================== -->
   <main class="flex-1 flex flex-col bg-canvas-base overflow-hidden">
     <!-- Top Navbar -->
     <header class="h-12 border-b border-canvas-border px-6 flex items-center justify-between bg-canvas-subtle shrink-0">
@@ -238,7 +253,7 @@ STUDIO_HTML = """<!DOCTYPE html>
           <span>/</span>
           <span class="text-white font-medium">Cinema Studio</span>
           <span>/</span>
-          <span class="text-slate-500">Voice Design & Dubbing</span>
+          <span id="breadcrumbView" class="text-slate-400 font-semibold">Voice Design & Dubbing</span>
         </div>
       </div>
 
@@ -253,8 +268,8 @@ STUDIO_HTML = """<!DOCTYPE html>
       </div>
     </header>
 
-    <!-- Scrollable Studio Content -->
-    <div class="flex-1 custom-scrollbar overflow-y-auto p-6 space-y-6">
+    <!-- VIEW 1: VOICE DESIGN (DEFAULT) -->
+    <div id="view-design" class="app-view flex-1 custom-scrollbar overflow-y-auto p-6 space-y-6">
 
       <!-- Section: Hear Demo Voice Library -->
       <div class="space-y-3">
@@ -446,63 +461,183 @@ STUDIO_HTML = """<!DOCTYPE html>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Section: Video Dubbing Pipeline & Full Movie Remuxer -->
-      <div class="bg-canvas-subtle border border-canvas-border rounded-xl p-5 space-y-4">
-        <div class="flex items-center justify-between">
-          <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center space-x-2">
-            <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>
-            <span>Full Video / Movie Pipeline</span>
-          </h3>
-          <span class="text-xs text-slate-500 font-mono">Demux → Separate → Whisper STT → Translate → Clone TTS → FFmpeg Remux</span>
+    <!-- VIEW 2: VOICE CLONER & ZERO-SHOT REFERENCE SAMPLER -->
+    <div id="view-cloner" class="app-view hidden flex-1 custom-scrollbar overflow-y-auto p-6 space-y-6">
+      <div class="bg-canvas-subtle border border-canvas-border rounded-xl p-6 space-y-6">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+            <span>Zero-Shot Voice Cloner & Reference Sampler</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Upload a 5-to-15 second reference audio snippet to instantly clone any speaker's vocal timbre, breath, and prosody.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Step 1 -->
-          <div class="bg-canvas-panel border border-canvas-border rounded-lg p-4 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-medium text-white">1. Input Movie</span>
-              <span class="text-[10px] text-emerald-400 font-mono">MKV, MP4</span>
-            </div>
-            <p class="text-[11px] text-slate-400">Select file or drag video directly from your filesystem.</p>
-            <div class="border border-dashed border-canvas-border rounded p-3 text-center cursor-pointer hover:border-brand-500 transition">
-              <span class="text-xs text-brand-400">Choose movie file...</span>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="border-2 border-dashed border-canvas-border hover:border-brand-500 rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition">
+            <svg class="w-10 h-10 text-brand-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <p class="text-sm font-medium text-slate-200">Drag & drop reference audio (WAV, MP3, FLAC)</p>
+            <p class="text-xs text-slate-500 mt-1">Optimal length: 5 - 15 seconds of clean speech</p>
           </div>
 
-          <!-- Step 2 -->
-          <div class="bg-canvas-panel border border-canvas-border rounded-lg p-4 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-medium text-white">2. Stem Ducking</span>
-              <span class="text-[10px] text-brand-400 font-mono">Demucs v4</span>
-            </div>
-            <p class="text-[11px] text-slate-400">Music and explosive sound effects are preserved and auto-ducked under dialogue.</p>
-            <div class="flex items-center justify-between text-xs pt-1">
-              <span class="text-slate-400">Ducking Level</span>
-              <span class="text-slate-200 font-mono">-14 dB</span>
+          <div class="space-y-4">
+            <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Cloned Actor Profiles</h3>
+            <div class="space-y-2">
+              <div class="p-3 bg-canvas-panel border border-canvas-border rounded-lg flex items-center justify-between">
+                <div>
+                  <h4 class="text-xs font-semibold text-white">Neo (Matrix Lead)</h4>
+                  <p class="text-[11px] text-slate-400">Reference: 8.2s sample • Timbre cosine: 0.94</p>
+                </div>
+                <button class="text-xs text-brand-400 font-mono hover:underline">Select</button>
+              </div>
+              <div class="p-3 bg-canvas-panel border border-canvas-border rounded-lg flex items-center justify-between">
+                <div>
+                  <h4 class="text-xs font-semibold text-white">Morpheus (Baritone)</h4>
+                  <p class="text-[11px] text-slate-400">Reference: 12.0s sample • Timbre cosine: 0.98</p>
+                </div>
+                <button class="text-xs text-brand-400 font-mono hover:underline">Select</button>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
 
-          <!-- Step 3 -->
-          <div class="bg-canvas-panel border border-canvas-border rounded-lg p-4 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-medium text-white">3. Remux Output</span>
-              <span class="text-[10px] text-cyan-400 font-mono">Zero Lip-Sync Drift</span>
-            </div>
-            <p class="text-[11px] text-slate-400">Pitch-preserving WSOLA time-stretches dialogue to match exact video keyframes.</p>
-            <button onclick="alert('Full video dub pipeline ready. Use `opendub run <video.mp4>` in terminal or submit via API!')" class="w-full py-1.5 rounded bg-brand-900/50 hover:bg-brand-900 text-brand-300 border border-brand-700/50 text-xs font-medium transition">
-              Launch Full Pipeline
+    <!-- VIEW 3: DEMUCS AUDIO SEPARATION & STEMS -->
+    <div id="view-stems" class="app-view hidden flex-1 custom-scrollbar overflow-y-auto p-6 space-y-6">
+      <div class="bg-canvas-subtle border border-canvas-border rounded-xl p-6 space-y-6">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+            <span>Demucs v4 Neural Stem Separation</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Isolate dialogue actors from original soundtrack, background music, explosions, and foley effects.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 font-mono text-xs">
+          <div class="p-4 bg-canvas-panel border border-canvas-border rounded-xl space-y-2">
+            <span class="text-brand-400 font-bold">1. VOCALS STEM</span>
+            <p class="text-[11px] text-slate-400">Separated speech channel ready for Whisper STT & Timestretching.</p>
+            <span class="inline-block px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px]">Active Track</span>
+          </div>
+          <div class="p-4 bg-canvas-panel border border-canvas-border rounded-xl space-y-2">
+            <span class="text-cyan-400 font-bold">2. MUSIC STEM</span>
+            <p class="text-[11px] text-slate-400">Original film score preserved with automatic sidechain ducking (-14dB).</p>
+            <span class="inline-block px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 text-[10px]">Preserved</span>
+          </div>
+          <div class="p-4 bg-canvas-panel border border-canvas-border rounded-xl space-y-2">
+            <span class="text-amber-400 font-bold">3. SFX & FOLEY</span>
+            <p class="text-[11px] text-slate-400">Environmental background, car chases, explosions, footsteps.</p>
+            <span class="inline-block px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 text-[10px]">Preserved</span>
+          </div>
+          <div class="p-4 bg-canvas-panel border border-canvas-border rounded-xl space-y-2">
+            <span class="text-purple-400 font-bold">4. DUBBED OVERLAY</span>
+            <p class="text-[11px] text-slate-400">New cloned voice synthesized in target language with synchronized lips.</p>
+            <span class="inline-block px-2 py-0.5 rounded bg-purple-950 text-purple-400 border border-purple-800 text-[10px]">Master Track</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: VIDEO PIPELINE & REMUXER -->
+    <div id="view-video" class="app-view hidden flex-1 custom-scrollbar overflow-y-auto p-6 space-y-6">
+      <div class="bg-canvas-subtle border border-canvas-border rounded-xl p-6 space-y-6">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+            <span>Full Movie Dubbing & Video Remuxing</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">End-to-end automated pipeline: Demux → Whisper → Translate → Clone TTS → FFmpeg Lip Remux.</p>
+        </div>
+
+        <div class="p-6 bg-canvas-panel border border-canvas-border rounded-xl space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-white uppercase">Movie Dubbing Task Dispatcher</span>
+            <span class="text-xs text-brand-400 font-mono">CLI Command: opendub run &lt;movie.mp4&gt;</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" placeholder="/path/to/movie.mp4" class="bg-canvas-elevated border border-canvas-border rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+            <button onclick="alert('Dubbing job dispatched to local worker queue!')" class="py-2.5 rounded-lg bg-gradient-to-r from-brand-600 to-brand-accent hover:from-brand-500 hover:to-brand-400 text-white font-medium text-xs transition">
+              🚀 Start Video Dubbing Job
             </button>
           </div>
         </div>
       </div>
+    </div>
 
+    <!-- VIEW 5: DIALOGUE TIMELINE & SUBTITLES -->
+    <div id="view-subtitles" class="app-view hidden flex-1 custom-scrollbar overflow-y-auto p-6 space-y-6">
+      <div class="bg-canvas-subtle border border-canvas-border rounded-xl p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-bold text-white flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+            <span>Dialogue Timeline & Subtitles (SRT / VTT)</span>
+          </h2>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 rounded bg-canvas-panel border border-canvas-border text-xs text-slate-300 hover:text-white">Export SRT</button>
+            <button class="px-3 py-1 rounded bg-canvas-panel border border-canvas-border text-xs text-slate-300 hover:text-white">Export VTT</button>
+          </div>
+        </div>
+
+        <div class="space-y-2 font-mono text-xs">
+          <div class="p-3 bg-canvas-panel border border-canvas-border rounded-lg flex items-center justify-between">
+            <span class="text-brand-400">[00:01.200 - 00:04.850]</span>
+            <span class="text-slate-200">"Beyond the city lights, a quieter world begins."</span>
+            <span class="text-emerald-400 text-[10px]">Actor 1 (UK Narrator)</span>
+          </div>
+          <div class="p-3 bg-canvas-panel border border-canvas-border rounded-lg flex items-center justify-between">
+            <span class="text-brand-400">[00:05.100 - 00:09.400]</span>
+            <span class="text-slate-200">"Every trail holds a story, and every journey starts with a little curiosity."</span>
+            <span class="text-emerald-400 text-[10px]">Actor 1 (UK Narrator)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 6: SAVED VOICES LIBRARY -->
+    <div id="view-library" class="app-view hidden flex-1 custom-scrollbar overflow-y-auto p-6 space-y-6">
+      <div class="bg-canvas-subtle border border-canvas-border rounded-xl p-6 space-y-4">
+        <h2 class="text-base font-bold text-white flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+          <span>Saved Voices & Model Registry</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="savedVoicesContainer">
+          <div class="p-4 bg-canvas-panel border border-canvas-border rounded-lg">
+            <h4 class="text-xs font-semibold text-white">Default Studio Voice</h4>
+            <p class="text-[11px] text-slate-400 mt-1">Kokoro-82M High-Fidelity local model</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 7: SETTINGS -->
+    <div id="view-settings" class="app-view hidden flex-1 custom-scrollbar overflow-y-auto p-6 space-y-6">
+      <div class="bg-canvas-subtle border border-canvas-border rounded-xl p-6 space-y-4">
+        <h2 class="text-base font-bold text-white flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+          <span>Engine Settings & Local Backends</span>
+        </h2>
+        <div class="space-y-3 text-xs">
+          <div class="flex items-center justify-between p-3 bg-canvas-panel border border-canvas-border rounded-lg">
+            <span>Ollama Endpoint</span>
+            <span class="font-mono text-emerald-400">http://127.0.0.1:11434</span>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-canvas-panel border border-canvas-border rounded-lg">
+            <span>Whisper Model Size</span>
+            <span class="font-mono text-brand-400">medium.en (Local)</span>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-canvas-panel border border-canvas-border rounded-lg">
+            <span>Demucs Separation Model</span>
+            <span class="font-mono text-cyan-400">htdemucs_ft (4 stems)</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ==================== BOTTOM STATUS & INTEGRATIONS DOCK ==================== -->
     <footer class="h-10 bg-canvas-base border-t border-canvas-border px-4 flex items-center justify-between shrink-0 text-xs text-slate-500">
       <div class="flex items-center space-x-4">
-        <!-- Integrations badges -->
         <span class="text-[11px] text-slate-400 font-mono">Integrations:</span>
         <div class="flex items-center space-x-2">
           <span class="px-2 py-0.5 rounded bg-canvas-panel border border-canvas-border text-[11px] text-slate-300 flex items-center space-x-1">
@@ -540,6 +675,40 @@ STUDIO_HTML = """<!DOCTYPE html>
   </main>
 
   <script>
+    // Tab / View Switching System
+    const viewTitles = {
+      'design': 'Voice Design & Dubbing',
+      'cloner': 'Zero-Shot Voice Cloner & Timbre',
+      'stems': 'Demucs Audio Separation (Stems)',
+      'video': 'Full Movie Dubbing & Video Remux',
+      'subtitles': 'Dialogue Timeline & Subtitles',
+      'library': 'Saved Voices & Model Registry',
+      'settings': 'Settings & Engine Backends'
+    };
+
+    function switchView(viewName) {
+      // Hide all views
+      document.querySelectorAll('.app-view').forEach(el => el.classList.add('hidden'));
+      // Show selected
+      const activeEl = document.getElementById(`view-${viewName}`);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      // Update sidebar nav active style
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-brand-500/18', 'border-brand-500/50', 'text-brand-500');
+        btn.classList.add('text-slate-400');
+      });
+      const currentNav = document.getElementById(`nav-${viewName}`);
+      if (currentNav) {
+        currentNav.classList.add('active');
+      }
+
+      // Update Breadcrumb & Panel Title
+      const title = viewTitles[viewName] || 'Studio';
+      document.getElementById('breadcrumbView').innerText = title;
+      document.getElementById('panelTitle').innerText = title;
+    }
+
     // Demo script sample
     const sampleScript = "Beyond the city lights, a quieter world begins. Every trail holds a story, and every journey starts with a little curiosity.";
     document.getElementById('scriptInput').value = sampleScript;
@@ -551,7 +720,6 @@ STUDIO_HTML = """<!DOCTYPE html>
       const text = document.getElementById('scriptInput').value.trim();
       const words = text ? text.split(/\\s+/).length : 0;
       document.getElementById('wordCount').innerText = `${words} words`;
-      // Average 140 words per minute ~ 2.33 words per second
       const estSeconds = (words / 2.33).toFixed(1);
       document.getElementById('estTime').innerText = `${estSeconds}s est. duration`;
     }
@@ -581,7 +749,6 @@ STUDIO_HTML = """<!DOCTYPE html>
     }
 
     function playVoicePreview(voiceId) {
-      // Simulate real-time audio sample play
       const status = document.getElementById('engineStatus');
       status.innerText = `Streaming high-res reference audio for [${voiceId}]...`;
       const wave = document.getElementById('audioWaveMock');
@@ -620,6 +787,11 @@ STUDIO_HTML = """<!DOCTYPE html>
         return;
       }
       alert(`Voice profile "${name}" successfully saved to local model registry!`);
+      const container = document.getElementById('savedVoicesContainer');
+      const div = document.createElement('div');
+      div.className = 'p-4 bg-canvas-panel border border-brand-500/50 rounded-lg';
+      div.innerHTML = `<h4 class="text-xs font-semibold text-brand-300">${name}</h4><p class="text-[11px] text-slate-400 mt-1">Saved custom voice profile</p>`;
+      container.appendChild(div);
       document.getElementById('profileNameInput').value = '';
     }
   </script>
