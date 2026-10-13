@@ -5,7 +5,7 @@
 - [x] 02. Implement Audio Stem Separator (Vocals vs Music/SFX) in src/opendub/stems.py
 - [x] 03. Implement Speech Segment Models and Timeline in src/opendub/models.py
 - [x] 04. Implement Subtitle Generator (SRT & VTT) in src/opendub/subtitles.py
-- [ ] 05. Implement Audio Time Stretcher and Pitch Preserver in src/opendub/timestretch.py
+- [x] 05. Implement Audio Time Stretcher and Pitch Preserver in src/opendub/timestretch.py
 
 ## Phase 2 : Transcription, Diarization & Translation Engine
 - [ ] 06. Implement Local Speech-to-Text Whisper Client in src/opendub/transcription.py
