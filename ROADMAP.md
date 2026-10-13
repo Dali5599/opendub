@@ -2,7 +2,7 @@
 
 ## Phase 1 : Core Media & Audio Demuxing Engine
 - [x] 01. Implement Media Extractor and Track Demuxer in src/opendub/media.py
-- [ ] 02. Implement Audio Stem Separator (Vocals vs Music/SFX) in src/opendub/stems.py
+- [x] 02. Implement Audio Stem Separator (Vocals vs Music/SFX) in src/opendub/stems.py
 - [ ] 03. Implement Speech Segment Models and Timeline in src/opendub/models.py
 - [ ] 04. Implement Subtitle Generator (SRT & VTT) in src/opendub/subtitles.py
 - [ ] 05. Implement Audio Time Stretcher and Pitch Preserver in src/opendub/timestretch.py
