@@ -12,7 +12,7 @@
 - [x] 07. Implement Speaker Diarization and Voice Clustering in src/opendub/diarization.py
 - [x] 08. Implement Multi-Language Translator with Token Budgeting in src/opendub/translator.py
 - [x] 09. Implement Dialogue Timing Adjuster and Syllable Counter in src/opendub/timing.py
-- [ ] 10. Implement Ollama & Cloud Translation Backends in src/opendub/translation_backends.py
+- [x] 10. Implement Ollama & Cloud Translation Backends in src/opendub/translation_backends.py
 
 ## Phase 3 : Voice Cloning & Text-to-Speech Synthesis
 - [ ] 11. Implement Voice Reference Sampler and Audio Normalizer in src/opendub/voice_sampler.py
