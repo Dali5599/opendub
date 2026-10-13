@@ -10,7 +10,7 @@
 ## Phase 2 : Transcription, Diarization & Translation Engine
 - [x] 06. Implement Local Speech-to-Text Whisper Client in src/opendub/transcription.py
 - [x] 07. Implement Speaker Diarization and Voice Clustering in src/opendub/diarization.py
-- [ ] 08. Implement Multi-Language Translator with Token Budgeting in src/opendub/translator.py
+- [x] 08. Implement Multi-Language Translator with Token Budgeting in src/opendub/translator.py
 - [ ] 09. Implement Dialogue Timing Adjuster and Syllable Counter in src/opendub/timing.py
 - [ ] 10. Implement Ollama & Cloud Translation Backends in src/opendub/translation_backends.py
 
