@@ -70,10 +70,26 @@ def run(
 @app.command()
 def web(
     port: int = typer.Option(7860, "--port", "-p", help="Port to serve the studio web UI"),
+    host: str = typer.Option("0.0.0.0", "--host", "-h", help="Host address to bind"),
 ):
     """Launch the interactive OpenDub Web Studio UI."""
-    console.print(f"[bold cyan]Launching OpenDub Web Studio on http://localhost:{port}[/bold cyan]")
-    console.print("[dim]Serving local offline studio...[/dim]")
+    import uvicorn
+    from fastapi import FastAPI
+    from fastapi.responses import HTMLResponse
+
+    server = FastAPI(title="OpenDub Studio")
+
+    @server.get("/", response_class=HTMLResponse)
+    def index():
+        return WebStudioDashboard.get_html()
+
+    @server.get("/health")
+    def health():
+        return {"status": "ok", "app": "opendub"}
+
+    console.print(f"[bold cyan]Launching OpenDub Web Studio on http://{host}:{port}[/bold cyan]")
+    console.print("[dim]Serving professional studio dashboard with real-time FastAPI backend...[/dim]")
+    uvicorn.run(server, host=host, port=port, log_level="warning")
 
 
 def main():
