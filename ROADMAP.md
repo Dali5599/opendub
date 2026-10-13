@@ -26,4 +26,4 @@
 - [x] 17. Implement Dubbing Preset and Configuration Manager in src/opendub/config.py
 - [x] 18. Implement Web Studio HTML/JS Dashboard in src/opendub/web_studio.py
 - [x] 19. Implement REST and Background Task Dispatcher in src/opendub/api.py
-- [ ] 20. Implement Complete CLI Commands (run, transcribe, web, presets) in src/opendub/cli.py
+- [x] 20. Implement Complete CLI Commands (run, transcribe, web, presets) in src/opendub/cli.py
