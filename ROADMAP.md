@@ -15,7 +15,7 @@
 - [x] 10. Implement Ollama & Cloud Translation Backends in src/opendub/translation_backends.py
 
 ## Phase 3 : Voice Cloning & Text-to-Speech Synthesis
-- [ ] 11. Implement Voice Reference Sampler and Audio Normalizer in src/opendub/voice_sampler.py
+- [x] 11. Implement Voice Reference Sampler and Audio Normalizer in src/opendub/voice_sampler.py
 - [ ] 12. Implement Local TTS Engine and Cloning Adapter in src/opendub/tts_engine.py
 - [ ] 13. Implement Emotion and Expressive Tone Preserver in src/opendub/emotion.py
 - [ ] 14. Implement Audio Mixer and Ducking Engine in src/opendub/mixer.py
