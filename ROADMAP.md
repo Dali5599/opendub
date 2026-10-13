@@ -23,7 +23,7 @@
 
 ## Phase 4 : Video Remuxing, Web Studio UI & CLI
 - [x] 16. Implement Video Remuxer with Lip-Sync Drift Compensation in src/opendub/remuxer.py
-- [ ] 17. Implement Dubbing Preset and Configuration Manager in src/opendub/config.py
+- [x] 17. Implement Dubbing Preset and Configuration Manager in src/opendub/config.py
 - [ ] 18. Implement Web Studio HTML/JS Dashboard in src/opendub/web_studio.py
 - [ ] 19. Implement REST and Background Task Dispatcher in src/opendub/api.py
 - [ ] 20. Implement Complete CLI Commands (run, transcribe, web, presets) in src/opendub/cli.py
